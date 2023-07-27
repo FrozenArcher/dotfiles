@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # Directory definition
-declare -a user_dirs=(home config)
+declare -a user_dirs=(home config scripts)
 declare -a sys_dirs=(etc)
 declare -A sync_dirs=(
 	[home]=$HOME
 	[config]=$HOME/.config
+	[scripts]=$HOME/scripts
 	[etc]=/etc
 )
-
 
 # Supported arguments
 declare -A args=(
@@ -16,7 +16,6 @@ declare -A args=(
 	[sys]=0
 	[clean]=0
 )
-
 
 # Environment check
 if [[ -z "$DOT_REPO" ]]; then
