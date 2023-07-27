@@ -113,7 +113,7 @@ else
 			help_msg
 			exit 0
 			;;
-		s | status)
+		t | status)
 			$git_cmd status
 			exit 0
 			;;
