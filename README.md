@@ -42,6 +42,12 @@ After installing, please write `DOT_REPO` environment variable to your profile a
 paru -S feh pavucontrol zsh awesome kitty xorg-xrandr picom-ftlabs-git ttf-jetbrains-mono-nerd ttf-lxgw-wenkai ttf-twemoji network-manager-applet udiskie blueman mate-power-manager xfce4-screensaver caffeine-ng pasystray fcitx5-im fcitx5-chinese-addons fcitx5-lua wget
 ```
 
+### Neovim dependencies
+
+```bash
+paru -S npm go fd ripgrep sed
+```
+
 ### Installing oh-my-zsh:
 
 ```bash
