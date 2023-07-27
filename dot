@@ -72,52 +72,52 @@ if [ $# -eq 0 ]; then
 else
 	while [ $# -gt 0 ]; do
 		case $1 in
-		a|all)
+		a | all)
 			args[user]=1
 			args[sys]=1
 			((cmd_cnt += 2))
 			shift
 			;;
-		u|user)
+		u | user)
 			args[user]=1
 			((cmd_cnt++))
 			shift
 			;;
-		s|sys|system)
+		s | sys | system)
 			args[sys]=1
 			((cmd_cnt++))
 			shift
 			;;
-		c|clean)
+		c | clean)
 			args[clean]=1
 			((cmd_cnt++))
 			shift
 			;;
-		-v|--verbose)
+		-v | --verbose)
 			verbose=1
 			shift
 			;;
-		-p|--pretend)
+		-p | --pretend)
 			pretend=1
 			shift
 			;;
-		-n|--no-backup)
+		-n | --no-backup)
 			nobackup=1
 			shift
 			;;
-		-r|--recover)
+		-r | --recover)
 			recover=1
 			shift
 			;;
-		h|help)
+		h | help)
 			help_msg
 			exit 0
 			;;
-		s|status)
+		s | status)
 			$git_cmd status
 			exit 0
 			;;
-		d|diff)
+		d | diff)
 			$git_cmd diff
 			exit 0
 			;;
@@ -169,7 +169,7 @@ update_dir() {
 		backup_file=$DOT_REPO/.backup/${f#$DOT_REPO/}
 		backup_dir=$(dirname $backup_file)
 		sudo=$3
-		
+
 		# Clean
 		if [ ${args[clean]} -eq 1 ]; then
 			if test $2 -eq 1; then
@@ -235,7 +235,7 @@ update_dir() {
 			((total_files--))
 		else
 			# other
-			if test $2 -eq 1; then 
+			if test $2 -eq 1; then
 				echo "Please check status of $real_file. Skipping..."
 			else
 				echo "Skipping $real_file..."
@@ -245,28 +245,27 @@ update_dir() {
 }
 
 confirm() {
-	while : 
-	do
+	while :; do
 		read -p "Please confirm the above operations. Proceed? [Y/n] " -r confirm
 		if [[ -z $confirm ]]; then
 			echo "y"
 			break
 		else
 			case $confirm in
-				y|Y) 
-					echo "y"
-					break
-					;;
-				n|N)
-					echo "n"
-					break
-					;;
-				*)
-					continue
-					;;
+			y | Y)
+				echo "y"
+				break
+				;;
+			n | N)
+				echo "n"
+				break
+				;;
+			*)
+				continue
+				;;
 			esac
 		fi
-	done	
+	done
 }
 
 # $1: sudo
