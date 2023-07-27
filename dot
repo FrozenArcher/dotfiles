@@ -31,7 +31,7 @@ fi
 
 # Help message
 usage() {
-	echo "USAGE: dot [all|user|system|clean|help] [-v|--verbose] [-p|--pretend]"
+	echo "USAGE: dot [all|user|system|clean|help|status|diff] [-v|--verbose] [-p|--pretend]"
 }
 
 help_msg() {
@@ -46,8 +46,8 @@ help_msg() {
 	echo "s|sys|system      Update system config files."
 	echo "c|clean           Delete all dotfiles. \`dot clean [all|user|system]\`"
 	echo "h|help            Display this help message."
-	#echo "t|status          Display repo status info"
-	#echo "d|diff            Display repo diff info"
+	echo "t|status          Display repo status info"
+	echo "d|diff            Display repo diff info"
 	echo ""
 	echo "OPTIONS           DESCRIPTION"
 	echo "-p|--pretend      Fake run, not affecting real filesystem"
@@ -62,6 +62,8 @@ verbose=0
 pretend=0
 nobackup=0
 recover=0
+
+git_cmd="git --git-dir=$DOT_REPO/.git --work-tree=$DOT_REPO"
 
 if [ $# -eq 0 ]; then
 	args[user]=1
@@ -109,6 +111,14 @@ else
 			;;
 		h|help)
 			help_msg
+			exit 0
+			;;
+		s|status)
+			$git_cmd status
+			exit 0
+			;;
+		d|diff)
+			$git_cmd diff
 			exit 0
 			;;
 		*)
@@ -259,46 +269,43 @@ confirm() {
 	done	
 }
 
-update_user() {
+# $1: sudo
+update() {
 	total_files=0
-	echo "==> Updating user dotfiles"
 	for d in ${user_dirs[@]}; do
 		update_dir "$d" 1
 	done
 	echo "$total_files files to proceed."
 	if test $pretend -eq 0 && [ $total_files -gt 0 ] && [[ "$(confirm)" == "y" ]]; then
 		for d in ${user_dirs[@]}; do
-			update_dir "$d" 0
+			update_dir "$d" 0 "$1"
 		done
 	fi
 	echo ""
+}
+
+update_user() {
+	echo "==> Updating user dotfiles"
+	update
 }
 
 update_sys() {
-	total_files=0
 	echo "==> Updating system config"
-	for d in ${sys_dirs[@]}; do
-		update_dir "$d" 1
-	done
-	echo "$total_files files to proceed."
-	if test $pretend -eq 0 && [ $total_files -gt 0 ] && [[ "$(confirm)" == "y" ]]; then
-		for d in ${sys_dirs[@]}; do
-			update_dir "$d" 0 "sudo"
-		done
-	fi
-	echo ""
+	update "sudo"
 }
+
+recover_warning=" !! All stored dotfiles will not recover automatically."
 
 clean_user() {
 	echo "==> Cleaning user dotfiles"
-	test $recover -eq 1 || echo " !! All stored dotfiles will not recover automatically."
-	update_user
+	test $recover -eq 1 || echo $recover_warning
+	update
 }
 
 clean_sys() {
 	echo "==> Cleaning system configuration"
-	test $recover -eq 1 || echo " !! All stored dotfiles will not recover automatically."
-	update_sys
+	test $recover -eq 1 || echo $recover_warning
+	update "sudo"
 }
 
 # Process files
