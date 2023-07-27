@@ -53,13 +53,15 @@ help_msg() {
 	echo "-p|--pretend      Fake run, not affecting real filesystem"
 	echo "-v|--verbose      Verbose output"
 	echo "-n|--no-backup    Don't backup existing files"
+	echo "-r|--recover      Recover files in backup directory when cleaning"
 }
 
 # Processing arguments
 cmd_cnt=0
 verbose=0
 pretend=0
-backup=0
+nobackup=0
+recover=0
 
 if [ $# -eq 0 ]; then
 	args[user]=1
@@ -97,8 +99,12 @@ else
 			pretend=1
 			shift
 			;;
-		-b|--backup)
-			backup=1
+		-n|--no-backup)
+			nobackup=1
+			shift
+			;;
+		-r|--recover)
+			recover=1
 			shift
 			;;
 		h|help)
@@ -138,6 +144,7 @@ fi
 LN="ln -svf"
 MV="mv -v"
 MD="mkdir -pv"
+RM="rm -v"
 
 total_files=0
 
@@ -153,7 +160,23 @@ update_dir() {
 		backup_dir=$(dirname $backup_file)
 		sudo=$3
 		
-		#echo "repo $repo_file; real $real_file; bk $backup_file"
+		# Clean
+		if [ ${args[clean]} -eq 1 ]; then
+			if test $2 -eq 1; then
+				echo "[RM] $real_file"
+				if test $recover -eq 1 && test -f $backup_file; then
+					echo "[MV] $backup_file $real_file"
+				fi
+			else
+				$sudo $RM $real_file
+				if test $recover -eq 1 && test -f $backup_file; then
+					$sudo $MV $backup_file $real_file
+				fi
+			fi
+			continue
+		fi
+
+		# Update file
 		if ! (test -f $real_file || test -d $real_file || test -L $real_file); then
 			# file not exist
 			if test $2 -eq 1; then
@@ -238,7 +261,7 @@ confirm() {
 
 update_user() {
 	total_files=0
-	echo "==> Updating user dotfile"
+	echo "==> Updating user dotfiles"
 	for d in ${user_dirs[@]}; do
 		update_dir "$d" 1
 	done
@@ -267,11 +290,15 @@ update_sys() {
 }
 
 clean_user() {
-	echo "Clean user not implemented"
+	echo "==> Cleaning user dotfiles"
+	test $recover -eq 1 || echo " !! All stored dotfiles will not recover automatically."
+	update_user
 }
 
 clean_sys() {
-	echo "Clean sys not implemented"
+	echo "==> Cleaning system configuration"
+	test $recover -eq 1 || echo " !! All stored dotfiles will not recover automatically."
+	update_sys
 }
 
 # Process files
