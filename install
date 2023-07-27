@@ -1,0 +1,27 @@
+#!/bin/sh
+
+if [[ -z $dot_repo ]]; then
+	dot_repo=$HOME/dotfiles
+fi
+
+if [[ -z $dot_target_dir ]]; then
+	dot_target_dir=$HOME/.local/bin
+fi
+
+echo "Installing $dot_repo/dot to $dot_target_dir"
+
+if [ ! -d $dot_target_dir ]; then
+	mkdir -pv $dot_target_dir
+fi
+
+ln -sfv $dot_repo/dot $dot_target_dir/dot
+
+echo "Done."
+echo "Please add $dot_target_dir to \$PATH."
+echo "Please set environment variable \$DOT_REPO in your profile. (Default is \$HOME/dotfiles)"
+
+echo ""
+echo "Updating dotfiles..."
+$dot_target_dir/dot all
+
+echo "Installation finishes."

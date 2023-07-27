@@ -1,0 +1,45 @@
+#!/bin/sh
+hidpi_resources=$HOME/.hidpi-xresources
+normal_resources=$HOME/.normal-xresources
+builtin_display="eDP-1-1"
+hdmi_display="HDMI-0"
+
+if [[ "$DESKTOP_SESSION" != "plasma" ]]; then
+	export QT_QPA_PLATFORMTHEME=qt5ct
+	export XCURSOR_SIZE=32
+
+	if [[ "$(xrandr | grep $hdmi_display | cut -d' ' -f2)" == "connected" ]]; then
+        xrandr --output $hdmi_display --mode 2560x1440 --rate 144 --primary
+		xrandr --output $builtin_display --mode 2560x1440 --rate 165 --left-of $hdmi_display
+        if [ -f $normal_resources ]; then
+            xrdb -merge $normal_resources
+        fi
+	elif [ -f $hidpi_resources ]; then
+		xrdb -merge $hidpi_resources
+	fi
+
+    if [[ "$DESKTOP_SESSION" != "awesome" ]]; then
+        feh --no-fehbg --bg-fill $HOME/.wallpaper
+    fi
+	
+	$HOME/scripts/wmrc.sh 1>/dev/null 2>~/.wmrc.log
+fi
+
+# PATH
+export PATH=$PATH:$HOME/.local/bin:$HOME/scripts/bin:$HOME/go/bin
+
+# proxy
+export all_proxy="http://127.0.0.1:7890"
+export http_proxy="http://127.0.0.1:7890"
+export https_proxy="http://127.0.0.1:7890"
+
+# Input method
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export SDL_IM_MODULE=fcitx
+export GLFW_IM_MODULE=ibus
+
+# Autostart
+fcitx5 &
+cfw &

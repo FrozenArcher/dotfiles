@@ -1,0 +1,290 @@
+#!/bin/sh
+
+# Directory definition
+declare -a user_dirs=(home config)
+declare -a sys_dirs=(etc)
+declare -A sync_dirs=(
+	[home]=$HOME
+	[config]=$HOME/.config
+	[etc]=/etc
+)
+
+
+# Supported arguments
+declare -A args=(
+	[user]=0
+	[sys]=0
+	[clean]=0
+)
+
+
+# Environment check
+if [[ -z "$DOT_REPO" ]]; then
+	echo "\$DOT_REPO not set. Use default \$HOME/dotfiles"
+	DOT_REPO=$HOME/dotfiles
+fi
+
+if [ ! -d $DOT_REPO ]; then
+	echo "\$DOT_REPO ($DOT_REPO) directory not found."
+	echo "Please check your install location."
+	exit 1
+fi
+
+# Help message
+usage() {
+	echo "USAGE: dot [all|user|system|clean|help] [-v|--verbose] [-p|--pretend]"
+}
+
+help_msg() {
+	echo ""
+	echo "dot - Dotfile manager"
+	usage
+	echo ""
+	echo "ARGUMENTS         DESCRIPTION"
+	echo "(No argument)     Equal to \`dot all\`"
+	echo "a|all             Update user and system configuration."
+	echo "u|user            Update user dotfile."
+	echo "s|sys|system      Update system config files."
+	echo "c|clean           Delete all dotfiles. \`dot clean [all|user|system]\`"
+	echo "h|help            Display this help message."
+	#echo "t|status          Display repo status info"
+	#echo "d|diff            Display repo diff info"
+	echo ""
+	echo "OPTIONS           DESCRIPTION"
+	echo "-p|--pretend      Fake run, not affecting real filesystem"
+	echo "-v|--verbose      Verbose output"
+	echo "-n|--no-backup    Don't backup existing files"
+}
+
+# Processing arguments
+cmd_cnt=0
+verbose=0
+pretend=0
+backup=0
+
+if [ $# -eq 0 ]; then
+	args[user]=1
+	args[sys]=1
+	((cmd_cnt += 2))
+else
+	while [ $# -gt 0 ]; do
+		case $1 in
+		a|all)
+			args[user]=1
+			args[sys]=1
+			((cmd_cnt += 2))
+			shift
+			;;
+		u|user)
+			args[user]=1
+			((cmd_cnt++))
+			shift
+			;;
+		s|sys|system)
+			args[sys]=1
+			((cmd_cnt++))
+			shift
+			;;
+		c|clean)
+			args[clean]=1
+			((cmd_cnt++))
+			shift
+			;;
+		-v|--verbose)
+			verbose=1
+			shift
+			;;
+		-p|--pretend)
+			pretend=1
+			shift
+			;;
+		-b|--backup)
+			backup=1
+			shift
+			;;
+		h|help)
+			help_msg
+			exit 0
+			;;
+		*)
+			echo "INVALID ARGUMENT $1"
+			usage
+			exit 1
+			;;
+		esac
+	done
+fi
+
+if [ $cmd_cnt -eq 0 ]; then
+	args[user]=1
+	args[sys]=1
+	cmd_cnt=2
+fi
+
+if test $verbose -eq 1; then
+	echo ""
+	echo "Checking commands"
+	for cmd in ${!args[@]}; do
+		if test ${args[$cmd]} -eq 1; then
+			echo "$cmd enabled"
+		else
+			echo "$cmd disabled"
+		fi
+	done
+	echo "$cmd_cnt commands in total."
+	echo ""
+fi
+
+# Update functions
+LN="ln -svf"
+MV="mv -v"
+MD="mkdir -pv"
+
+total_files=0
+
+# $1: repo dir $2: 1:show, 0:proceed $3: sudo
+update_dir() {
+	files=($(find $DOT_REPO/$1 -type f))
+	((total_files += ${#files[@]}))
+	for f in ${files[@]}; do
+		repo_file=$f
+		real_file=${sync_dirs[$1]}/${f#$DOT_REPO/$1/}
+		real_dir=$(dirname $real_file)
+		backup_file=$DOT_REPO/.backup/${f#$DOT_REPO/}
+		backup_dir=$(dirname $backup_file)
+		sudo=$3
+		
+		#echo "repo $repo_file; real $real_file; bk $backup_file"
+		if ! (test -f $real_file || test -d $real_file || test -L $real_file); then
+			# file not exist
+			if test $2 -eq 1; then
+				test $verbose -eq 1 && (test -d $real_dir || echo "[MD] $real_dir")
+				echo "[LN] $repo_file -> $real_file"
+			else
+				test -d $real_dir || $sudo $MD $real_dir
+				$sudo $LN $repo_file $real_file
+			fi
+		elif test -L $real_file && ! test $real_file -ef $repo_file; then
+			# real_file is a link and not pointing to repo_file
+			if test $2 -eq 1; then
+				echo "$real_file is a link pointing to $(readlink -q $real_file)"
+				if [ -f $(readlink -q $real_file) ]; then
+					test $verbose -eq 1 && (test -d $backup_dir || echo "[MD] $backup_dir")
+					test $verbose -eq 1 && echo "[LN] $(readlink $real_file) $backup_file"
+				fi
+				test $verbose -eq 1 && (test -d $real_dir || echo "[MD] $real_dir")
+				echo "[LN] $repo_file -> $real_file"
+			else
+				if [ -f $(readlink -q $real_file) ]; then
+					test -d $backup_dir || $MD $backup_dir
+					$sudo $LN $(readlink $real_file) $backup_file
+				fi
+				test -d $real_dir || $sudo $MD $real_dir
+				$sudo $LN $repo_file $real_file
+			fi
+		elif test -f $real_file && ! test $real_file -ef $repo_file; then
+			# file exists
+			if test $2 -eq 1; then
+				if test $verbose -eq 1; then
+					test -d $backup_dir || echo "[MD] $backup_dir"
+					echo "[MV] $real_file -> $backup_file"
+					test -d $real_dir || echo "[MD] $real_dir"
+				fi
+				echo "[LN] $repo_file -> $real_file"
+			else
+				test -d $backup_dir || $MD $backup_dir
+				$sudo $MV $real_file $backup_file
+				test -d $real_dir || $sudo $MD $real_dir
+				$sudo $LN $repo_file $real_file
+			fi
+		elif test -L $real_file && test $real_file -ef $repo_file; then
+			# already set properly
+			if test $verbose -eq 1 && test $2 -eq 1; then echo "- $real_file already set proprly."; fi
+			((total_files--))
+		else
+			# other
+			if test $2 -eq 1; then 
+				echo "Please check status of $real_file. Skipping..."
+			else
+				echo "Skipping $real_file..."
+			fi
+		fi
+	done
+}
+
+confirm() {
+	while : 
+	do
+		read -p "Please confirm the above operations. Proceed? [Y/n] " -r confirm
+		if [[ -z $confirm ]]; then
+			echo "y"
+			break
+		else
+			case $confirm in
+				y|Y) 
+					echo "y"
+					break
+					;;
+				n|N)
+					echo "n"
+					break
+					;;
+				*)
+					continue
+					;;
+			esac
+		fi
+	done	
+}
+
+update_user() {
+	total_files=0
+	echo "==> Updating user dotfile"
+	for d in ${user_dirs[@]}; do
+		update_dir "$d" 1
+	done
+	echo "$total_files files to proceed."
+	if test $pretend -eq 0 && [ $total_files -gt 0 ] && [[ "$(confirm)" == "y" ]]; then
+		for d in ${user_dirs[@]}; do
+			update_dir "$d" 0
+		done
+	fi
+	echo ""
+}
+
+update_sys() {
+	total_files=0
+	echo "==> Updating system config"
+	for d in ${sys_dirs[@]}; do
+		update_dir "$d" 1
+	done
+	echo "$total_files files to proceed."
+	if test $pretend -eq 0 && [ $total_files -gt 0 ] && [[ "$(confirm)" == "y" ]]; then
+		for d in ${sys_dirs[@]}; do
+			update_dir "$d" 0 "sudo"
+		done
+	fi
+	echo ""
+}
+
+clean_user() {
+	echo "Clean user not implemented"
+}
+
+clean_sys() {
+	echo "Clean sys not implemented"
+}
+
+# Process files
+if [ ${args[clean]} -eq 1 ]; then
+	if [ $cmd_cnt -eq 1 ]; then
+		clean_user
+		clean_sys
+	else
+		if [ ${args[user]} -eq 1 ]; then clean_user; fi
+		if [ ${args[sys]} -eq 1 ]; then clean_sys; fi
+	fi
+else
+	if [ ${args[user]} -eq 1 ]; then update_user; fi
+	if [ ${args[sys]} -eq 1 ]; then update_sys; fi
+fi
