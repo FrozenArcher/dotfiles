@@ -19,7 +19,7 @@ declare -A args=(
 
 # Environment check
 if [[ -z "$DOT_REPO" ]]; then
-	echo "\$DOT_REPO not set. Use default \$HOME/dotfiles"
+	echo -e "\e[31m\$DOT_REPO not set. Use default \$HOME/dotfiles\e[0m"
 	DOT_REPO=$HOME/dotfiles
 fi
 
@@ -31,25 +31,24 @@ fi
 
 # Help message
 usage() {
-	echo "USAGE: dot [all|user|system|clean|help|status|diff] [-v|--verbose] [-p|--pretend]"
+	echo -e "\e[1;34mUSAGE\e[0m dot [all|user|system|clean|help|status|diff] [-v|--verbose] [-p|--pretend]"
 }
 
 help_msg() {
-	echo ""
-	echo "dot - Dotfile manager"
+	echo -e "\e[1mdot - Dotfile manager\e[0m"
 	usage
 	echo ""
-	echo "ARGUMENTS         DESCRIPTION"
+	echo -e "\e[1;34mARGUMENTS         DESCRIPTION\e[0m"
 	echo "(No argument)     Equal to \`dot all\`"
-	echo "a|all             Update user and system configuration."
-	echo "u|user            Update user dotfile."
-	echo "s|sys|system      Update system config files."
-	echo "c|clean           Delete all dotfiles. \`dot clean [all|user|system]\`"
-	echo "h|help            Display this help message."
+	echo "a|all             Update user and system configuration"
+	echo "u|user            Update user dotfile"
+	echo "s|sys|system      Update system config files"
+    echo "c|clean           Delete all dotfiles (\`dot clean [all|user|system]\`)"
+	echo "h|help            Display this help message"
 	echo "t|status          Display repo status info"
 	echo "d|diff            Display repo diff info"
 	echo ""
-	echo "OPTIONS           DESCRIPTION"
+	echo -e "\e[1;34mOPTIONS           DESCRIPTION\e[0m"
 	echo "-p|--pretend      Fake run, not affecting real filesystem"
 	echo "-v|--verbose      Verbose output"
 	echo "-n|--no-backup    Don't backup existing files"
@@ -283,26 +282,30 @@ update() {
 	echo ""
 }
 
+process_hint() {
+    echo -e "\e[34m==> \e[0m\e[1m$1\e[0m"
+}
+
 update_user() {
-	echo "==> Updating user dotfiles"
+	process_hint "Updating user dotfiles"
 	update
 }
 
 update_sys() {
-	echo "==> Updating system config"
+	process_hint "Updating system config"
 	update "sudo"
 }
 
 recover_warning=" !! All stored dotfiles will not recover automatically."
 
 clean_user() {
-	echo "==> Cleaning user dotfiles"
+	process_hint "Cleaning user dotfiles"
 	test $recover -eq 1 || echo $recover_warning
 	update
 }
 
 clean_sys() {
-	echo "==> Cleaning system configuration"
+	process_hint "Cleaning system configuration"
 	test $recover -eq 1 || echo $recover_warning
 	update "sudo"
 }
