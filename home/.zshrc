@@ -37,9 +37,20 @@ else
 	export EDITOR='nvim'
 fi
 
+# Aliases
 LS_CMD="lsd"
 
-# Aliases
+if command -v systemctl > /dev/null; then
+    POWEROFF="systemctl poweroff"
+    REBOOT="systemctl reboot"
+elif command -v loginctl > /dev/null; then
+    POWEROFF="loginctl poweroff"
+    REBOOT="loginctl reboot"
+else
+    POWEROFF="sudo init 0"
+    REBOOT="sudo init 6"
+fi
+
 alias n="nvim ."
 alias nv="nvim"
 alias sczsh="source ~/.zshrc"
@@ -56,3 +67,6 @@ alias gps="git push"
 alias cl="clear"
 alias ll="$LS_CMD -l"
 alias la="$LS_CMD -lA"
+alias ff="fastfetch"
+alias po="$POWEROFF"
+alias rb="$REBOOT"
