@@ -3,12 +3,13 @@
 Including:
 
 * An awesome dotfile manager `dot`
-* awesome `~/.config/awesome/`
-* kitty `~/.config/kitty/`
-* picom (`picom-ftlabs-git` or default `picom`) `~/.config/picom/`
-* fontconfig `~/.config/fontconfig/`
-* zsh (ohmyzsh) `~/.zshrc`
-* display manager `~/.xprofile`
+* alacritty `config/alacritty/`
+* kitty `config/kitty/`
+* picom (`picom-ftlabs-git` or default `picom`) `config/picom/`
+* fontconfig `config/fontconfig/`
+* zsh (ohmyzsh) `home/.zshrc`
+* display manager `home/.xprofile`
+* xorg `etc/X11/xorg.conf.d/`
 
 ## Installing Everything
 
@@ -18,6 +19,7 @@ Including:
 git clone git@github.com:FrozenArcher/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
+
 The default repo location is `$HOME/dotfiles`, and `dot` script will be linked to `$HOME/.local/bin/dot`.
 
 If you wish to change the two locations, you can set environment variables `dot_repo` and `dot_target_dir` when running the `install` script.
