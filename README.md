@@ -39,30 +39,30 @@ Overall, this script is useful for managing configuration files across multiple 
 
 ## Installing Everything
 
-### Installing the dotfiles
+### Installing dotfiles:
 
 ``` bash
 git clone git@github.com:FrozenArcher/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-The default repo location is `$HOME/dotfiles`, and `dot` script will be linked to `$HOME/.local/bin/dot`.
+The default repository location is `$HOME/dotfiles`, and the `dot` script will be linked to `$HOME/.local/bin/dot`.
 
-If you wish to change the two locations, you can set environment variables `dot_repo` and `dot_target_dir` when running the `install` script.
+If you wish to change these locations, you can set environment variables `dot_repo` and `dot_target_dir` when running the install script.
 
-Remember that `dot_repo` is the location where you clone the repository.
+Remember that `dot_repo` is the location where you have cloned the repository.
 
 ``` bash
-env dot_repo=/path/one dot_target_dir=/path/two ./install
+env dot_repo=/path/to/repo dot_target_dir=/path/to/target ./install
 ```
 
-If `install` script is run directly, the two variables will be set to their default values.
+If the `install` script is run directly, the two variables will be set to their default values.
 
 ```bash
 ./install
 ```
 
-After installing, please write `DOT_REPO` environment variable to your profile and add the above `dot_target_dir` to your `PATH`. By default, the values are set in `.zshrc` in this repository.
+After installing, please add the `DOT_REPO` environment variable to your shell's profile and add the above `dot_target_dir` to your `PATH`. By default, the values are set in `.zshrc` in this repository.
 
 ### Installing softwares:
 
@@ -78,7 +78,7 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 ```
 
-After installing ohmyzsh, you need to re-run `dot` script to overwrite `.zshrc` created by ohmyzsh install script.
+After installing ohmyzsh, you need to run the `dot` script again to overwrite `.zshrc` created by the ohmyzsh install script.
 
 ### Changing default shell to zsh:
 
