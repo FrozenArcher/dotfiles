@@ -1,4 +1,4 @@
-# FrozenArcher's Dotfiles
+# FrozenArcher's Dotfiles && Dotfile Manager
 
 Including:
 
