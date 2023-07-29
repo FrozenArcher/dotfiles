@@ -41,7 +41,7 @@ After installing, please write `DOT_REPO` environment variable to your profile a
 ### Installing softwares:
 
 ```bash
-paru -S feh pavucontrol zsh kitty alacritty xorg-xrandr picom-ftlabs-git ttf-jetbrains-mono-nerd ttf-lxgw-wenkai ttf-twemoji network-manager-applet udiskie blueman xfce4-power-manager xfce4-screensaver caffeine-ng pasystray fcitx5-im fcitx5-chinese-addons fcitx5-lua wget npm go fd ripgrep sed lxappearance qt5ct
+paru -S feh pavucontrol zsh kitty alacritty xorg-xrandr picom-ftlabs-git ttf-jetbrains-mono-nerd ttf-lxgw-wenkai ttf-twemoji network-manager-applet udiskie blueman xfce4-power-manager xfce4-screensaver caffeine-ng pasystray fcitx5-im fcitx5-chinese-addons fcitx5-lua wget npm go fd ripgrep sed lxappearance qt5ct lsd bat unzip
 ```
 
 ### Installing oh-my-zsh:
