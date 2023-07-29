@@ -3,6 +3,7 @@
 Including:
 
 * An awesome dotfile manager `dot`
+* Neovim `nvim/`
 * alacritty `config/alacritty/`
 * kitty `config/kitty/`
 * picom (`picom-ftlabs-git` or default `picom`) `config/picom/`
@@ -10,6 +11,31 @@ Including:
 * zsh (ohmyzsh) `home/.zshrc`
 * display manager `home/.xprofile`
 * xorg `etc/X11/xorg.conf.d/`
+
+## About the Dotfile Manager
+
+The `dot` script is a dotfile manager that helps manage configuration files across multiple systems. 
+
+To use the script, you can call it from the terminal with one of the available arguments:
+
+* (No argument) - This is equal to calling dot all and will update both user and system configuration files.
+* a|all - This updates both user and system configuration files.
+* u|user - This updates only the user's configuration files.
+* s|sys|system - This updates only the system's configuration files.
+* c|clean - This deletes all dotfiles. You can specify whether you want to delete user, system, or all dotfiles by passing user, system, or all as an argument.
+* h|help - This displays a help message and usage information for the script.
+* t|status - This displays information on the status of the repository.
+* d|diff - This displays information on any differences between the current configuration files and the repository.
+
+In addition to these arguments, there are also several options you can use:
+
+* -p|--pretend - This runs the script in pretend mode, where no changes are actually made to the filesystem.
+* -v|--verbose - This enables verbose output, providing more detailed information on the actions being taken by the script.
+* -n|--no-backup - This disables backup creation when updating or cleaning dotfiles.
+* -r|--recover - This recovers deleted dotfiles from the backup directory when cleaning.
+
+Overall, this script is useful for managing configuration files across multiple systems and ensuring consistency in your setup.
+
 
 ## Installing Everything
 
