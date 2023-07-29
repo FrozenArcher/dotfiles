@@ -267,16 +267,30 @@ confirm() {
 	done
 }
 
-# $1: sudo
+# $1: user/sys
 update() {
+    case $1 in
+        user)
+            _dirs=(${user_dirs[@]})
+            _sudo=""
+            ;;
+        sys)
+            _dirs=(${sys_dirs[@]})
+            _sudo="sudo"
+            ;;
+        *)
+            echo "Wrong argument $1 in update"
+            exit 1
+            ;;
+    esac
 	total_files=0
-	for d in ${user_dirs[@]}; do
+	for d in $_dirs; do
 		update_dir "$d" 1
 	done
 	echo "$total_files files to proceed."
 	if test $pretend -eq 0 && [ $total_files -gt 0 ] && [[ "$(confirm)" == "y" ]]; then
-		for d in ${user_dirs[@]}; do
-			update_dir "$d" 0 "$1"
+		for d in $_dirs; do
+			update_dir "$d" 0 "$_sudo"
 		done
 	fi
 	echo ""
@@ -288,12 +302,12 @@ process_hint() {
 
 update_user() {
 	process_hint "Updating user dotfiles"
-	update
+	update user
 }
 
 update_sys() {
 	process_hint "Updating system config"
-	update "sudo"
+	update sys
 }
 
 recover_warning=" !! All stored dotfiles will not recover automatically."
@@ -301,13 +315,13 @@ recover_warning=" !! All stored dotfiles will not recover automatically."
 clean_user() {
 	process_hint "Cleaning user dotfiles"
 	test $recover -eq 1 || echo $recover_warning
-	update
+	update user
 }
 
 clean_sys() {
 	process_hint "Cleaning system configuration"
 	test $recover -eq 1 || echo $recover_warning
-	update "sudo"
+	update sys
 }
 
 # Process files
