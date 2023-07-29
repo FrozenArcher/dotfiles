@@ -329,7 +329,7 @@ update() {
 		;;
 	esac
 
-	echo "$_dirs"
+	test $verbose -eq 1 && echo "directories: $_dirs"
 
 	total_files=0
 	for d in $_dirs; do
