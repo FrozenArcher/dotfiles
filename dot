@@ -43,7 +43,7 @@ help_msg() {
 	echo "a|all             Update user and system configuration"
 	echo "u|user            Update user dotfile"
 	echo "s|sys|system      Update system config files"
-    echo "c|clean           Delete all dotfiles (\`dot clean [all|user|system]\`)"
+	echo "c|clean           Delete all dotfiles (\`dot clean [all|user|system]\`)"
 	echo "h|help            Display this help message"
 	echo "t|status          Display repo status info"
 	echo "d|diff            Display repo diff info"
@@ -150,14 +150,83 @@ if test $verbose -eq 1; then
 fi
 
 # Update functions
-LN="ln -svf"
-MV="mv -v"
-MD="mkdir -pv"
-RM="rm -v"
+
+# $1: show/process, $2: source file, $3: link target, [$4: sudo]
+LN() {
+	if test $# -lt 3; then
+		echo "ERROR: Wrong argument number in LN"
+		exit 1
+	fi
+	case $1 in
+	show)
+		echo "[LN] $2 -> $3"
+		;;
+	process)
+		$4 ln -svf $2 $3
+		;;
+	*)
+		echo "Wrong argument $1"
+		;;
+	esac
+}
+# $1: show/process, $2: source file, $3: target, [$4: sudo]
+MV() {
+	if test $# -lt 3; then
+		echo "ERROR: Wrong argument number in MV"
+		exit 1
+	fi
+	case $1 in
+	show)
+		echo "[MV] $2 -> $3"
+		;;
+	process)
+		$4 mv -v $2 $3
+		;;
+	*)
+		echo "Wrong argument $1"
+		;;
+	esac
+}
+# $1: show/process, $2: target directory, [$3: sudo]
+MD() {
+	if test $# -lt 2; then
+		echo "ERROR: Wrong argument number in MKDIR"
+		exit 1
+	fi
+	case $1 in
+	show)
+		echo "[MKDIR] $2"
+		;;
+	process)
+		$3 mkdir -vp $2
+		;;
+	*)
+		echo "Wrong argument $1"
+		;;
+	esac
+}
+# $1: show/process, $2: target file, [$3: sudo]
+RM() {
+	if test $# -lt 2; then
+		echo "ERROR: Wrong argument number in RM"
+		exit 1
+	fi
+	case $1 in
+	show)
+		echo "[RM] $2"
+		;;
+	process)
+		$3 rm -v $2
+		;;
+	*)
+		echo "Wrong argument $1"
+		;;
+	esac
+}
 
 total_files=0
 
-# $1: repo dir $2: 1:show, 0:proceed $3: sudo
+# $1: repo dir, $2: show/process, [$3: sudo]
 update_dir() {
 	files=($(find $DOT_REPO/$1 -type f))
 	((total_files += ${#files[@]}))
@@ -171,16 +240,9 @@ update_dir() {
 
 		# Clean
 		if [ ${args[clean]} -eq 1 ]; then
-			if test $2 -eq 1; then
-				echo "[RM] $real_file"
-				if test $recover -eq 1 && test -f $backup_file; then
-					echo "[MV] $backup_file $real_file"
-				fi
-			else
-				$sudo $RM $real_file
-				if test $recover -eq 1 && test -f $backup_file; then
-					$sudo $MV $backup_file $real_file
-				fi
+			RM $2 $real_file $3
+			if test $recover -eq 1 && test -f $backup_file; then
+				MV $2 $backup_file $real_file $3
 			fi
 			continue
 		fi
@@ -188,50 +250,33 @@ update_dir() {
 		# Update file
 		if ! (test -f $real_file || test -d $real_file || test -L $real_file); then
 			# file not exist
-			if test $2 -eq 1; then
-				test $verbose -eq 1 && (test -d $real_dir || echo "[MD] $real_dir")
-				echo "[LN] $repo_file -> $real_file"
-			else
-				test -d $real_dir || $sudo $MD $real_dir
-				$sudo $LN $repo_file $real_file
-			fi
+			test -d $real_dir || MD $2 $real_dir $3
+			LN $2 $repo_file $real_file $3
+
 		elif test -L $real_file && ! test $real_file -ef $repo_file; then
 			# real_file is a link and not pointing to repo_file
-			if test $2 -eq 1; then
+			if test $verbose -eq 1 && [[ "$2" == "show" ]]; then
 				echo "$real_file is a link pointing to $(readlink -q $real_file)"
-				if [ -f $(readlink -q $real_file) ]; then
-					test $verbose -eq 1 && (test -d $backup_dir || echo "[MD] $backup_dir")
-					test $verbose -eq 1 && echo "[LN] $(readlink $real_file) $backup_file"
-				fi
-				test $verbose -eq 1 && (test -d $real_dir || echo "[MD] $real_dir")
-				echo "[LN] $repo_file -> $real_file"
-			else
-				if [ -f $(readlink -q $real_file) ]; then
-					test -d $backup_dir || $MD $backup_dir
-					$sudo $LN $(readlink $real_file) $backup_file
-				fi
-				test -d $real_dir || $sudo $MD $real_dir
-				$sudo $LN $repo_file $real_file
 			fi
+			if [ -f $(readlink -q $real_file) ]; then
+				test -d $backup_dir || MD $2 $backup_dir
+				LN $2 $(readlink $real_file) $backup_file $3
+			fi
+			test -d $real_dir || MD $2 $real_dir $3
+			LN $2 $repo_file $real_file $3
+
 		elif test -f $real_file && ! test $real_file -ef $repo_file; then
 			# file exists
-			if test $2 -eq 1; then
-				if test $verbose -eq 1; then
-					test -d $backup_dir || echo "[MD] $backup_dir"
-					echo "[MV] $real_file -> $backup_file"
-					test -d $real_dir || echo "[MD] $real_dir"
-				fi
-				echo "[LN] $repo_file -> $real_file"
-			else
-				test -d $backup_dir || $MD $backup_dir
-				$sudo $MV $real_file $backup_file
-				test -d $real_dir || $sudo $MD $real_dir
-				$sudo $LN $repo_file $real_file
-			fi
+			test -d $backup_dir || MD $2 $backup_dir
+			MV $2 $real_file $backup_file $3
+			test -d $real_dir || MD $2 $real_dir $3
+			LN $2 $repo_file $real_file $3
+
 		elif test -L $real_file && test $real_file -ef $repo_file; then
 			# already set properly
 			if test $verbose -eq 1 && test $2 -eq 1; then echo "- $real_file already set proprly."; fi
 			((total_files--))
+
 		else
 			# other
 			if test $2 -eq 1; then
@@ -260,6 +305,7 @@ confirm() {
 				break
 				;;
 			*)
+				echo "Please enter one of 'y' and 'n', or enter to select 'y'"
 				continue
 				;;
 			esac
@@ -269,35 +315,35 @@ confirm() {
 
 # $1: user/sys
 update() {
-    case $1 in
-        user)
-            _dirs=(${user_dirs[@]})
-            _sudo=""
-            ;;
-        sys)
-            _dirs=(${sys_dirs[@]})
-            _sudo="sudo"
-            ;;
-        *)
-            echo "Wrong argument $1 in update"
-            exit 1
-            ;;
-    esac
+	case $1 in
+	user)
+		_dirs=(${user_dirs[@]})
+		_sudo=""
+		;;
+	sys)
+		_dirs=(${sys_dirs[@]})
+		_sudo=""
+		;;
+	*)
+		echo "Wrong argument $1 in update"
+		;;
+	esac
+
 	total_files=0
 	for d in $_dirs; do
-		update_dir "$d" 1
+		update_dir "$d" show
 	done
 	echo "$total_files files to proceed."
 	if test $pretend -eq 0 && [ $total_files -gt 0 ] && [[ "$(confirm)" == "y" ]]; then
 		for d in $_dirs; do
-			update_dir "$d" 0 "$_sudo"
+			update_dir "$d" process "$_sudo"
 		done
 	fi
 	echo ""
 }
 
 process_hint() {
-    echo -e "\e[34m==> \e[0m\e[1m$1\e[0m"
+	echo -e "\e[34m==> \e[0m\e[1m$1\e[0m"
 }
 
 update_user() {
