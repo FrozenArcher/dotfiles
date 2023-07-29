@@ -1,12 +1,13 @@
 #!/bin/sh
 
 # Directory definition
-declare -a user_dirs=(home config scripts)
+declare -a user_dirs=(home config scripts nvim)
 declare -a sys_dirs=(etc)
 declare -A sync_dirs=(
 	[home]=$HOME
 	[config]=$HOME/.config
 	[scripts]=$HOME/scripts
+	[nvim]=$HOME/.config/nvim
 	[etc]=/etc
 )
 
@@ -274,7 +275,7 @@ update_dir() {
 
 		elif test -L $real_file && test $real_file -ef $repo_file; then
 			# already set properly
-			if test $verbose -eq 1 && test $2 -eq 1; then echo "- $real_file already set proprly."; fi
+			if test $verbose -eq 1 && [[ "$2" -eq "show" ]]; then echo "- $real_file already set proprly."; fi
 			((total_files--))
 
 		else
