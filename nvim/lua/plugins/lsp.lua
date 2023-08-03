@@ -1,4 +1,33 @@
 -- plugins.lsp: lspconfig, mason
+
+local lsp_ensure_installed = {
+	"lua_ls",
+	"pyright",
+	"clangd",
+	"rust_analyzer",
+	"gopls",
+	"bashls",
+}
+
+local lsp_specific_settings = {
+	["lua_ls"] = {
+		Lua = {
+			completion = {
+				callSnippet = "Replace",
+			},
+			diagnostics = {
+				globals = { "vim" },
+			},
+			workspace = {
+				library = {
+					[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+					[vim.fn.stdpath("config") .. "/lua"] = true,
+				},
+			},
+		},
+	},
+}
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -30,14 +59,7 @@ return {
 				},
 			})
 			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"lua_ls",
-					"pyright",
-					"clangd",
-					"rust_analyzer",
-					"gopls",
-					"bashls",
-				},
+				ensure_installed = lsp_ensure_installed,
 				automatic_installation = true,
 			})
 
@@ -91,45 +113,21 @@ return {
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-			-- Lua
-			require("lspconfig")["lua_ls"].setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				settings = {
-					Lua = {
-						completion = {
-							callSnippet = "Replace",
-						},
-						diagnostics = {
-							globals = { "vim" },
-						},
-						workspace = {
-							library = {
-								[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-								[vim.fn.stdpath("config") .. "/lua"] = true,
-							},
-						},
-					},
-				},
-			})
+			-- attach each server
+			for i = 1, #lsp_ensure_installed do
+				local server = lsp_ensure_installed[i]
+				local server_settings = {}
 
-			-- Golang
-			require("lspconfig")["gopls"].setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
+				if lsp_specific_settings[server] ~= nil then
+					server_settings = lsp_specific_settings[server]
+				end
 
-			-- Python
-			require("lspconfig")["pyright"].setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
-
-			-- Bash
-			require("lspconfig")["bashls"].setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
+				require("lspconfig")[server].setup({
+					on_attach = on_attach,
+					capabilities = capabilities,
+					settings = server_settings,
+				})
+			end
 		end,
 	},
 }
