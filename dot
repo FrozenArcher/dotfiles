@@ -22,6 +22,9 @@ declare -A args=(
 if [[ -z "$DOT_REPO" ]]; then
 	echo -e "\e[31m\$DOT_REPO not set. Use default \$HOME/dotfiles\e[0m"
 	DOT_REPO=$HOME/dotfiles
+	dot_repo_unset=1
+else
+	dot_repo_unset=0
 fi
 
 if [ ! -d $DOT_REPO ]; then
@@ -152,6 +155,7 @@ fi
 
 # Update functions
 
+# Get a shortened path
 # $1: dir, $2: old prefix, $3: new prefix
 short() {
 	if test $verbose -ne 1 && [[ ${1#$DOT_REPO/} != "$1" ]]; then
@@ -382,6 +386,11 @@ clean_sys() {
 	test $recover -eq 1 || echo $recover_warning
 	update sys
 }
+
+# show a DOT_REPO prompt
+if test $dot_repo_unset -ne 1; then
+	echo -e "\e[1mDOT_REPO\e[0m $(short $DOT_REPO)"
+fi
 
 # Process files
 if [ ${args[clean]} -eq 1 ]; then
