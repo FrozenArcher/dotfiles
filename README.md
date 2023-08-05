@@ -12,6 +12,8 @@ Including:
 * display manager `home/.xprofile`
 * xorg `etc/X11/xorg.conf.d/`
 
+**NOTE** Files under `sysfiles-backup` are config files for my own laptop, and are not tracked by `dot`.
+
 ## About the Dotfile Manager
 
 The `dot` script is a dotfile manager that helps manage configuration files across multiple systems. 
