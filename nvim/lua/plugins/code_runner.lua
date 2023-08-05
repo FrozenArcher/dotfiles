@@ -14,6 +14,10 @@ return {
 					"cd $dir &&",
 					"gcc -o $fileNameWithoutExt -Wall -lm -O3 $file",
 				},
+				go = {
+					"cd $dir &&",
+					"go run .",
+				},
 			},
 		})
 	end,

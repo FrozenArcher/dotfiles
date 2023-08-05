@@ -11,7 +11,8 @@ nmap("<leader>wl", function()
 	require("lazy").show()
 end, "Open Lazy.nvim window")
 -- Floating terminal
-map({ "n", "t" }, "<leader>wt", "<cmd>Lspsaga term_toggle<CR>", "Toggle floating terminal")
+nmap("<leader>wt", "<cmd>ToggleTerm<CR>", "Toggle floating terminal")
+map("t", "<esc>", "<cmd>ToggleTerm<CR>", "Toggle terminal in Term mode")
 -- Mason
 nmap("<leader>wm", "<cmd>Mason<cr>", "Open Mason window")
 -- Trouble
