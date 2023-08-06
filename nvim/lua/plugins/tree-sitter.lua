@@ -18,6 +18,7 @@ return {
 				"ini",
 				"jsonc",
 				"python",
+				"rasi",
 				"rust",
 				"go",
 				"lua",
