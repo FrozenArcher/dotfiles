@@ -50,12 +50,12 @@ cd ~/dotfiles
 
 The default repository location is `$HOME/dotfiles`, and the `dot` script will be linked to `$HOME/.local/bin/dot`.
 
-If you wish to change these locations, you can set environment variables `dot_repo` and `dot_target_dir` when running the install script.
+If you wish to change these locations, you can set environment variables `DOT_REPO` and `DOT_TARGET_DIR` when running the install script.
 
-Remember that `dot_repo` is the location where you have cloned the repository.
+Remember that `DOT_REPO` is the location where you have cloned the repository.
 
 ``` bash
-env dot_repo=/path/to/repo dot_target_dir=/path/to/target ./install
+env DOT_REPO=/path/to/repo DOT_TARGET_DIR=/path/to/target ./install
 ```
 
 If the `install` script is run directly, the two variables will be set to their default values.
@@ -64,7 +64,7 @@ If the `install` script is run directly, the two variables will be set to their 
 ./install
 ```
 
-After installing, please add the `DOT_REPO` environment variable to your shell's profile and add the above `dot_target_dir` to your `PATH`. By default, the values are set in `.zshrc` in this repository.
+After installing, please add the `DOT_REPO` environment variable to your shell's profile and add the above `DOT_TARGET_DIR` to your `PATH`. By default, `DOT_REPO` is set to `~/dotfiles` in `.zshrc` in this repository.
 
 ### Installing softwares:
 
