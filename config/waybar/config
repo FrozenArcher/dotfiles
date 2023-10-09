@@ -5,26 +5,39 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["hyprland/workspaces", "custom/media"],
-    "modules-center": ["hyprland/window"],
-    "modules-right": ["pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "battery", "battery#bat2", "clock", "tray"],
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["pulseaudio", "network", "cpu",
+	// "memory", "temperature", 
+	"backlight", "keyboard-state", "battery", "battery#bat2", "tray"],
     // Modules configuration
-    // "sway/workspaces": {
+    "hyprland/workspaces": {
     //     "disable-scroll": true,
     //     "all-outputs": true,
     //     "warp-on-scroll": false,
-    //     "format": "{name}: {icon}",
-    //     "format-icons": {
-    //         "1": "",
-    //         "2": "",
-    //         "3": "",
-    //         "4": "",
-    //         "5": "",
-    //         "urgent": "",
-    //         "focused": "",
-    //         "default": ""
-    //     }
-    // },
+        "active-only": false,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "1": " ",
+            "2": " ",
+            "3": " ",
+            "4": " ",
+            "5": " ",
+            "urgent": " ",
+            "focused": " ",
+            "default": " "
+        },
+        "persistent-workspaces": {
+            "*": 5,
+        },
+    },
+    "hyprland/window": {
+        //"format": "👉 {title}",
+        "max-length": 41,
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "  $1",
+        },
+    },
     "keyboard-state": {
         "numlock": true,
         "capslock": true,
@@ -92,7 +105,7 @@
     },
     "battery": {
         "states": {
-            // "good": 95,
+            "good": 95,
             "warning": 30,
             "critical": 15
         },
