@@ -4,6 +4,8 @@ Including:
 
 * An awesome dotfile manager `dot`
 * Neovim `nvim/`
+* hyprland `config/hypr/`
+* waybar `config/waybar/`
 * alacritty `config/alacritty/`
 * kitty `config/kitty/`
 * picom (`picom-ftlabs-git` or default `picom`) `config/picom/`
@@ -87,3 +89,9 @@ After installing ohmyzsh, you need to run the `dot` script again to overwrite `.
 ```bash
 chsh -s $(which zsh)
 ```
+
+## TODO
+
+* clean up waybar config
+* add wofi config
+* import scripts from my old dotfile repo
