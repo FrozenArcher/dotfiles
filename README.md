@@ -6,13 +6,12 @@ Including:
 * Neovim `nvim/`
 * hyprland `config/hypr/`
 * waybar `config/waybar/`
-* alacritty `config/alacritty/`
 * kitty `config/kitty/`
 * picom (`picom-ftlabs-git` or default `picom`) `config/picom/`
 * fontconfig `config/fontconfig/`
 * zsh (ohmyzsh) `home/.zshrc`
-* display manager `home/.xprofile`
-* xorg `etc/X11/xorg.conf.d/`
+* X display manager `home/.xprofile`
+* Xorg `etc/X11/xorg.conf.d/`
 
 **NOTE** Files under `sysfiles-backup` are config files for my own laptop, and are not tracked by `dot`.
 
@@ -43,6 +42,53 @@ Overall, this script is useful for managing configuration files across multiple 
 
 ## Installing Everything
 
+### Installing desktop environment dependencies:
+
+#### Fonts
+
+```bash
+paru -S ttf-jetbrains-mono-nerd ttf-lxgw-wenkai ttf-lxgw-neo-xihei ttf-lxgw-fasmart-gothic ttf-twemoji
+```
+
+#### Common stuff
+
+```bash
+paru -S sed wget zsh kitty pavucontrol network-manager-applet udiskie blueman caffeine-ng fcitx5-{im,chinese-addons,lua} lsd bat unzip lolcat
+```
+
+#### Theming stuff
+
+```bash
+paru -S lxappearance qt5ct kvantum ant-dracula-kvantum-theme-git dracula-gtk-theme candy-icons-git papirus-icon-theme capitaine-cursors
+```
+
+#### X stuff
+
+```bash
+paru -S feh xorg-xrandr picom-ftlabs-git xfce4-power-manager xfce4-screensaver pasystray 
+```
+
+#### Wayland stuff
+
+```bash
+paru -S waybar fuzzel
+```
+
+#### Neovim dependencies
+
+```bash
+paru -S npm go fd ripgrep nodejs clang
+```
+### Installing oh-my-zsh:
+
+```bash
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
+
+Please install omz before dotfiles. Otherwise, after installing omz, you need to run `dot` again to overwrite `.zshrc` created by the ohmyzsh install script.
+
 ### Installing dotfiles:
 
 ``` bash
@@ -68,22 +114,6 @@ If the `install` script is run directly, the two variables will be set to their 
 
 After installing, please add the `DOT_REPO` environment variable to your shell's profile and add the above `DOT_TARGET_DIR` to your `PATH`. By default, `DOT_REPO` is set to `~/dotfiles` in `.zshrc` in this repository.
 
-### Installing softwares:
-
-```bash
-paru -S feh pavucontrol zsh kitty alacritty xorg-xrandr picom-ftlabs-git ttf-jetbrains-mono-nerd ttf-lxgw-wenkai ttf-twemoji network-manager-applet udiskie blueman xfce4-power-manager xfce4-screensaver caffeine-ng pasystray fcitx5-im fcitx5-chinese-addons fcitx5-lua wget npm go fd ripgrep sed lxappearance qt5ct lsd bat unzip
-```
-
-### Installing oh-my-zsh:
-
-```bash
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-```
-
-After installing ohmyzsh, you need to run the `dot` script again to overwrite `.zshrc` created by the ohmyzsh install script.
-
 ### Changing default shell to zsh:
 
 ```bash
@@ -93,5 +123,5 @@ chsh -s $(which zsh)
 ## TODO
 
 * clean up waybar config
-* add wofi config
 * import scripts from my old dotfile repo
+* write all dependencies in a file
