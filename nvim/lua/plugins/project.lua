@@ -16,6 +16,7 @@ return {
 					"Makefile",
 					"package.json",
 				},
+				manual_mode = true,
 			})
 			require("telescope").load_extension("projects")
 		end,
