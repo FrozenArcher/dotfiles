@@ -5,7 +5,7 @@
 }
 
 window#waybar {
-    background-color: transparent;
+    background-color: rgba(24, 16, 24, 0.3);
     border-bottom: 2px solid rgba(100, 114, 125, 0.5);
     color: #ffffff;
     transition-property: background-color;
@@ -51,7 +51,7 @@ button:hover {
 #workspaces button {
     padding: 0 5px;
     background-color: transparent;
-    color: #bbbbbb;
+    color: #ffffff;
 }
 
 #workspaces button.empty {
@@ -64,6 +64,7 @@ button:hover {
 
 #workspaces button.active {
     color: #ffffff;
+    background-color: rgba(150, 150, 150, 0.2);
     box-shadow: inset 0 -2px #ffffff;
 }
 
