@@ -59,7 +59,7 @@ paru -S sed wget zsh kitty pavucontrol network-manager-applet udiskie blueman ca
 #### Theming stuff
 
 ```bash
-paru -S lxappearance qt5ct kvantum ant-dracula-kvantum-theme-git dracula-gtk-theme candy-icons-git papirus-icon-theme capitaine-cursors
+paru -S lxappearance qt5ct kvantum kvantum-theme-dracula-git dracula-gtk-theme candy-icons-git papirus-icon-theme capitaine-cursors
 ```
 
 #### X stuff
@@ -118,6 +118,14 @@ After installing, please add the `DOT_REPO` environment variable to your shell's
 
 ```bash
 chsh -s $(which zsh)
+```
+
+### Setting up your wallpaper:
+
+both `.fehbg` and `hyprpaper` will look up `~/.wallpaper` as your wallpaper, so link your favourite wallpaper to `~/.wallpaper`:
+
+```bash
+ln -sf /path/to/wallpaper ~/.wallpaper
 ```
 
 ## TODO
