@@ -72,3 +72,10 @@ alias la="$LS_CMD -lA"
 alias ff="fastfetch"
 alias po="$POWEROFF"
 alias rb="$REBOOT"
+
+# Activate anaconda environment
+_anaconda_script=/opt/anaconda/etc/profile.d/conda.sh
+if [ -f $_anaconda_script ]; then
+    source $_anaconda_script
+    export ANACONDA_ENV="true"
+fi
