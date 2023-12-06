@@ -17,7 +17,6 @@ run picom -b
 run nm-applet &
 run udiskie --tray &
 run blueman-applet &
-run cbatticon &
 run xfce4-power-manager &
 run caffeine &
 run xfce4-screensaver &
