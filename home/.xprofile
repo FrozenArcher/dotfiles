@@ -22,7 +22,9 @@ if [[ "$DESKTOP_SESSION" != "plasma" ]]; then
 		feh --no-fehbg --bg-fill $HOME/.wallpaper
 	fi
 
-	$HOME/scripts/wmrc.sh 1>/dev/null 2>~/.wmrc.log
+    if [[ "$DESKTOP_SESSION" != "xfce" ]]; then
+	    $HOME/scripts/wmrc.sh 1>/dev/null 2>~/.wmrc.log
+    fi
 fi
 
 # PATH
