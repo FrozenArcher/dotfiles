@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 hidpi_resources=$HOME/.hidpi-xresources
 normal_resources=$HOME/.normal-xresources
 builtin_display="eDP-1-1"
