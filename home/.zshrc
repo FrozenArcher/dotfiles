@@ -1,5 +1,4 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# .zshrc by FrozenArcher
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -79,3 +78,16 @@ if [ -f $_anaconda_script ]; then
     source $_anaconda_script
     export ANACONDA_ENV="true"
 fi
+unset _anaconda_script
+
+__conda_setup="$('/home/fracher/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/fracher/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/fracher/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/fracher/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
