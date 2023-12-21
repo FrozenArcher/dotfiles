@@ -12,6 +12,7 @@ Including:
 * zsh (ohmyzsh) `home/.zshrc`
 * X display manager `home/.xprofile`
 * Xorg `etc/X11/xorg.conf.d/`
+* tmux `home/.tmux.conf`
 
 **NOTE** Files under `sysfiles-backup` are config files for my own laptop, and are not tracked by `dot`.
 
