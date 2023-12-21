@@ -1,5 +1,9 @@
 # .zshrc by FrozenArcher
 
+if [[ "$(which tmux)" != "tmux not found" ]]; then
+    test -n "$PS1" && test -z "$TMUX" && exec tmux new -ADX
+fi
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
