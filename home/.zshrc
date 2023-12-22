@@ -1,7 +1,11 @@
 # .zshrc by FrozenArcher
 
-if [[ "$(which tmux)" != "tmux not found" ]]; then
-    test -n "$PS1" && test -z "$TMUX" && exec tmux new -ADX
+# if [[ "$(which tmux)" != "tmux not found" ]]; then
+#     test -n "$PS1" && test -z "$TMUX" && exec tmux new -ADX
+# fi
+if test ! $(tmux ls > /dev/null 2>&1); then
+    tmux start-server
+    export TMUX_SERVER_STARTED="true"
 fi
 
 # Path to your oh-my-zsh installation.
@@ -75,6 +79,8 @@ alias la="$LS_CMD -lA"
 alias ff="fastfetch"
 alias po="$POWEROFF"
 alias rb="$REBOOT"
+alias ta="tmux attach -t"
+alias tas="tmux attach -t shell"
 
 # Activate anaconda environment
 _anaconda_script=/opt/anaconda/etc/profile.d/conda.sh
