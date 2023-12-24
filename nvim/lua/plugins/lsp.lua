@@ -77,7 +77,7 @@ return {
 			require("lsp-format").setup({})
 
 			-- Set up cool signs for diagnostics
-			local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+			local signs = { Error = "E", Warn = "W", Hint = "H", Info = "I" }
 			for type, icon in pairs(signs) do
 				local hl = "DiagnosticSign" .. type
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
@@ -85,7 +85,7 @@ return {
 
 			-- Diagnostic config
 			local config = {
-				virtual_text = false,
+				virtual_text = true,
 				signs = {
 					active = signs,
 				},

@@ -169,20 +169,20 @@ local config = {
 			width = "100%",
 			right_padding = 0,
 		},
-		--diagnostics = {
-		--  symbols = {
-		--    hint = "H",
-		--    info = "I",
-		--    warn = "!",
-		--    error = "X",
-		--  },
-		--  highlights = {
-		--    hint = "DiagnosticSignHint",
-		--    info = "DiagnosticSignInfo",
-		--    warn = "DiagnosticSignWarn",
-		--    error = "DiagnosticSignError",
-		--  },
-		--},
+		diagnostics = {
+			symbols = {
+				hint = "H",
+				info = "I",
+				warn = "!",
+				error = "X",
+			},
+			highlights = {
+				hint = "DiagnosticSignHint",
+				info = "DiagnosticSignInfo",
+				warn = "DiagnosticSignWarn",
+				error = "DiagnosticSignError",
+			},
+		},
 		indent = {
 			indent_size = 2,
 			padding = 1,
@@ -226,7 +226,7 @@ local config = {
 				added = "✚", -- NOTE: you can set any of these to an empty string to not show them
 				deleted = "✖",
 				modified = "",
-				renamed = "",
+				renamed = "r",
 				-- Status type
 				untracked = "",
 				ignored = "",

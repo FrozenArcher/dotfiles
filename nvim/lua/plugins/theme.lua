@@ -1,17 +1,28 @@
 -- plugins.theme: colorscheme plugin
 return {
-	"rafamadriz/neon",
-	lazy = false, -- make sure we load this during startup if it is your main colorscheme
-	priority = 1000, -- make sure to load this before all the other start plugins
+	"catppuccin/nvim",
+	name = "catppuccin",
+	priority = 1000,
+	lazy = false,
 	config = function()
-		-- load the colorscheme here
-		vim.g.neon_style = "dark"
-		vim.g.neon_italic_comment = true
-		vim.g.neon_italic_keyword = true
-		vim.g.neon_italic_function = true
-		vim.g.neon_italic_boolean = true
-		vim.g.neon_italic_variable = true
-		vim.g.neon_bold = true
-		vim.cmd([[colorscheme neon]])
+		require("catppuccin").setup({
+			flavour = "macchiato",
+			transparent_background = true,
+			integrations = {
+				nvimtree = false,
+				hop = true,
+				lsp_saga = true,
+				mason = true,
+				neotree = true,
+				which_key = true,
+			},
+			styles = {
+				keywords = { "bold" },
+				loops = { "italic" },
+				functions = { "italic" },
+				types = { "bold" },
+			},
+		})
+		vim.cmd.colorscheme("catppuccin")
 	end,
 }

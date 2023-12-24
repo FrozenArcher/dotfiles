@@ -73,7 +73,7 @@ return {
 					offsets = {
 						{
 							filetype = "neo-tree",
-							text = "Neo Tree", -- | function ,
+							text = "NeoTree", -- | function ,
 							text_align = "left", -- | "center" | "right"
 							separator = true,
 						},
@@ -99,7 +99,7 @@ return {
 					persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
 					-- can also be a table containing 2 custom separators
 					-- [focused and unfocused]. eg: { '|', '|' }
-					separator_style = "slant", -- | "slope" | "thick" | "thin" | { 'any', 'any' },
+					separator_style = "thick", -- | "slope" | "thick" | "thin" | { 'any', 'any' },
 					enforce_regular_tabs = false, -- | true,
 					always_show_bufferline = true, -- | false,
 					hover = {
@@ -113,6 +113,7 @@ return {
 					--end
 					sort_by = "insert_at_end",
 				},
+				highlights = require("catppuccin.groups.integrations.bufferline").get(),
 			})
 		end,
 	},
