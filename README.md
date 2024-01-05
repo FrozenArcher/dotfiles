@@ -10,8 +10,8 @@ Including:
 * picom (`picom-ftlabs-git` or default `picom`) `config/picom/`
 * fontconfig `config/fontconfig/`
 * zsh (ohmyzsh) `home/.zshrc`
-* X display manager `home/.xprofile`
-* Xorg `etc/X11/xorg.conf.d/`
+* xorg environment `home/.xprofile`
+* xorg.conf `etc/X11/xorg.conf.d/`
 * tmux `home/.tmux.conf`
 
 **NOTE** Files under `sysfiles-backup` are config files for my own laptop, and are not tracked by `dot`.
@@ -80,6 +80,22 @@ paru -S waybar fuzzel
 ```bash
 paru -S npm go fd ripgrep nodejs clang
 ```
+
+### Installing tmux:
+
+```bash
+paru -S tmux
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+
+Then enter tmux:
+
+```bash
+tmux
+```
+
+Install plugins by pressing `prefix` + `I`.
+
 ### Installing oh-my-zsh:
 
 ```bash
