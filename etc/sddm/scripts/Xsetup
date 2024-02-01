@@ -1,0 +1,10 @@
+#!/bin/sh
+logfile=/tmp/Xsetup.log
+echo "" > $logfile
+if [[ ! -z "$(lsmod | grep -o nvidia)" ]]; then
+	echo "## nvidia found ##" >> $logfile
+	xrandr --setprovideroutputsource modesetting NVIDIA-G0 >> $logfile 2>&1
+else
+	echo "## nvidia not found ##" >> $logfile
+fi
+xrandr --auto
