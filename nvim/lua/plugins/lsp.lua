@@ -40,7 +40,7 @@ return {
 			},
 			"RRethy/vim-illuminate",
 			"hrsh7th/cmp-nvim-lsp",
-			"lukas-reineke/lsp-format.nvim",
+			-- "lukas-reineke/lsp-format.nvim",
 			{
 				"j-hui/fidget.nvim",
 				branch = "legacy",
@@ -74,7 +74,7 @@ return {
 			})
 
 			-- Set up lsp-format
-			require("lsp-format").setup({})
+			-- require("lsp-format").setup({})
 
 			-- Set up cool signs for diagnostics
 			local signs = { Error = "E", Warn = "W", Hint = "H", Info = "I" }
@@ -104,10 +104,9 @@ return {
 			vim.diagnostic.config(config)
 
 			-- This function gets run when an LSP connects to a particular buffer.
-			local on_attach = function(client, bufnr)
-				require("lsp-format").on_attach(client)
-				--require("illuminate").on_attach(client)
-			end
+			-- local on_attach = function(client, bufnr)
+			-- 	require("lsp-format").on_attach(client)
+			-- end
 
 			-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
