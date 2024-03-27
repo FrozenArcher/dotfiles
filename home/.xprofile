@@ -44,4 +44,4 @@ export GLFW_IM_MODULE=ibus
 
 # Autostart
 fcitx5 &
-cfw &
+clash-verge &
