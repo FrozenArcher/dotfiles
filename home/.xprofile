@@ -18,7 +18,7 @@ if [[ "$DESKTOP_SESSION" != "plasma" ]]; then
 		xrdb -merge $hidpi_resources
 	fi
 
-	if [[ "$DESKTOP_SESSION" != "awesome" ]]; then
+	if [[ "$DESKTOP_SESSION" != "awesome" ]] && [[ "$DESKTOP_SESSION" != "xfce" ]]; then
 		feh --no-fehbg --bg-fill $HOME/.wallpaper
 	fi
 
