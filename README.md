@@ -4,10 +4,11 @@ Including:
 
 * An awesome dotfile manager `dot`
 * Neovim `nvim/`
+* i3 + i3status-rust `config/i3`
 * hyprland `config/hypr/`
 * waybar `config/waybar/`
 * kitty `config/kitty/`
-* picom (`picom-ftlabs-git` or default `picom`) `config/picom/`
+* picom (vanilla `picom`) `config/picom/`
 * fontconfig `config/fontconfig/`
 * zsh (ohmyzsh) `home/.zshrc`
 * xorg environment `home/.xprofile`
@@ -38,9 +39,6 @@ In addition to these arguments, there are also several options you can use:
 * `-n|--no-backup` - This disables backup creation when updating or cleaning dotfiles.
 * `-r|--recover` - This recovers deleted dotfiles from the backup directory when cleaning.
 
-Overall, this script is useful for managing configuration files across multiple systems and ensuring consistency in your setup.
-
-
 ## Installing Everything
 
 ### Installing desktop environment dependencies:
@@ -66,7 +64,7 @@ paru -S lxappearance qt5ct kvantum kvantum-theme-dracula-git dracula-gtk-theme c
 #### X stuff
 
 ```bash
-paru -S feh xorg-xrandr picom-ftlabs-git xfce4-power-manager xfce4-screensaver pasystray 
+paru -S feh xorg-xrandr picom xfce4-power-manager xfce4-screensaver pasystray 
 ```
 
 #### Wayland stuff
@@ -78,7 +76,7 @@ paru -S waybar fuzzel
 #### Neovim dependencies
 
 ```bash
-paru -S npm go fd ripgrep nodejs clang
+paru -S npm go fd ripgrep nodejs clang stylua
 ```
 
 ### Installing tmux:
