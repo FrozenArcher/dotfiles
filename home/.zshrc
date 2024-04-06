@@ -84,26 +84,6 @@ alias rb="$REBOOT"
 alias ta="tmux attach -t"
 alias tas="tmux attach -t shell"
 
-# Activate anaconda environment
-_anaconda_script=/opt/anaconda/etc/profile.d/conda.sh
-if [ -f $_anaconda_script ]; then
-    source $_anaconda_script
-    export ANACONDA_ENV="true"
-fi
-unset _anaconda_script
-
-__conda_setup="$('/home/fracher/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/fracher/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/fracher/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/fracher/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-
 # Activate nvm
 if [ -d /usr/share/nvm ]; then
     [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
@@ -111,3 +91,6 @@ if [ -d /usr/share/nvm ]; then
     source /usr/share/nvm/bash_completion
     source /usr/share/nvm/install-nvm-exec
 fi
+
+# Activate miniconda environment
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
