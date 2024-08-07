@@ -38,6 +38,8 @@ export https_proxy="http://127.0.0.1:7890"
 export PATH=$HOME/go/bin:$HOME/.cargo/bin:$HOME/.local/bin:$PATH
 export GOPATH=$HOME/go
 export DOT_REPO=$HOME/dotfiles
+# conda
+export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then

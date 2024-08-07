@@ -1,10 +1,10 @@
 channels:
-  - defaults
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+  - https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/
 
 auto_activate_base: false
 
 create_default_packages:
   - ipython
-  - numpy
-  - scipy
-  - pandas
+
