@@ -40,6 +40,8 @@ export GOPATH=$HOME/go
 export DOT_REPO=$HOME/dotfiles
 # conda
 export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
+# solana
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
