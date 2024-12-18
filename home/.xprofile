@@ -31,9 +31,9 @@ fi
 export PATH=$PATH:$HOME/.local/bin:$HOME/scripts/bin:$HOME/go/bin
 
 # proxy
-export all_proxy="http://127.0.0.1:7890"
-export http_proxy="http://127.0.0.1:7890"
-export https_proxy="http://127.0.0.1:7890"
+export all_proxy="http://127.0.0.1:7897"
+export http_proxy="http://127.0.0.1:7897"
+export https_proxy="http://127.0.0.1:7897"
 
 # Input method
 export GTK_IM_MODULE=fcitx
